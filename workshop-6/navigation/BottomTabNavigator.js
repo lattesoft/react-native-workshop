@@ -28,7 +28,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         }}
       />
       <BottomTab.Screen
-        name="User"
+        name="Links"
         component={UserScreen}
         options={{
           title: "User",

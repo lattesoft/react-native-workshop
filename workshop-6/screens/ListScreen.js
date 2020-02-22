@@ -8,12 +8,16 @@ import {
   StyleSheet,
   TextInput,
   KeyboardAvoidingView,
-  RefreshControl
+  RefreshControl,
+  TouchableOpacity
 } from "react-native";
 import { appStyles } from "../constants/Layout";
 import { Icon } from "native-base";
 import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
+import Colors from "../constants/Colors";
+import ProductCard from "../components/ProductCard";
+import SearchBox from "../components/SearchBox";
 
 export default class ListScreen extends Component {
   constructor(props) {
@@ -22,22 +26,34 @@ export default class ListScreen extends Component {
       products: [],
       searchProducts: [],
       searchText: "",
+      page: 1,
+      lastPage: 1,
       refreshing: false
     };
   }
 
   componentDidMount() {
+    this.fetchApi(this.state.page);
+  }
+
+  fetchApi = (page, loadMore = false) => {
     axios
       .get(
-        "https://grocery.walmart.com/v4/api/products/search?storeId=1855&page=1&query=icescream"
+        `https://grocery.walmart.com/v4/api/products/search?storeId=1855&page=${page}&query=icescream`
       )
       .then(res => {
         this.setState({
-          products: res.data.products,
-          searchProducts: res.data.products
+          products: loadMore
+            ? this.state.products.concat(res.data.products)
+            : res.data.products,
+          searchProducts: loadMore
+            ? this.state.products.concat(res.data.products)
+            : res.data.products,
+          page: page + 1,
+          lastPage: Math.ceil(res.data.totalCount / 20)
         });
       });
-  }
+  };
 
   handleSearch = text => {
     let items = this.state.products.filter(item =>
@@ -47,11 +63,11 @@ export default class ListScreen extends Component {
   };
 
   onRefresh = () => {
-    this.setState({ searchData: this.state.data, searchText: "" });
+    this.fetchApi(1);
   };
 
   render() {
-    let { searchProducts } = this.state;
+    let { searchProducts, searchText, page, lastPage } = this.state;
     return (
       <View>
         <FlatList
@@ -60,85 +76,12 @@ export default class ListScreen extends Component {
           data={searchProducts}
           keyExtractor={(item, index) => `${index}`}
           extraData={this.state}
-          renderItem={({ item, index }) => (
-            <View
-              style={{
-                backgroundColor: "#FFF",
-                padding: 10,
-                margin: 10,
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "column",
-                flex: 1,
-                ...styles.box_shadow
-              }}
-            >
-              <View style={{ padding: 10 }}>
-                <Image
-                  source={{ uri: item.basic.image.thumbnail }}
-                  style={{
-                    minWidth: "100%",
-                    height: 200,
-                    resizeMode: "cover",
-                    borderRadius: 5
-                  }}
-                />
-              </View>
-
-              <View
-                style={{
-                  position: "absolute",
-                  top: 170,
-                  width: "100%"
-                }}
-              >
-                <LinearGradient
-                  colors={["transparent", "rgba(0,0,0,1)"]}
-                  style={{
-                    borderBottomLeftRadius: 5,
-                    borderBottomRightRadius: 5,
-                    padding: 5
-                  }}
-                >
-                  <Text
-                    style={appStyles.textStyle("#fff", 16)}
-                    numberOfLines={2}
-                  >
-                    {item.basic.name}
-                  </Text>
-                </LinearGradient>
-              </View>
-              
-
-              <Text>TEST</Text>
-                
-                <Text>TEST</Text>
-                <Text>TEST</Text>
-            </View>
-          )}
+          renderItem={({ item, index }) => <ProductCard item={item} />}
           ListHeaderComponent={
-            <View
-              style={{
-                margin: 10,
-                padding: 10,
-                backgroundColor: "#fff",
-                flexDirection: "row",
-                alignItems: "center",
-                ...styles.box_shadow
-              }}
-            >
-              <Icon
-                type="FontAwesome5"
-                name="search"
-                style={{ marginRight: 10 }}
-              />
-              <TextInput
-                placeholder="Search"
-                onChangeText={text => this.handleSearch(text)}
-                value={this.state.searchText}
-                style={[appStyles.textStyle("#000", 20), { flex: 1 }]}
-              />
-            </View>
+            <SearchBox
+              searchText={searchText}
+              onChangeText={this.handleSearch}
+            />
           }
           refreshControl={
             <RefreshControl
@@ -146,6 +89,8 @@ export default class ListScreen extends Component {
               onRefresh={this.onRefresh}
             />
           }
+          onEndReached={() => this.fetchApi(page, page != lastPage)}
+          onEndReachedThreshold={10}
         />
       </View>
     );
