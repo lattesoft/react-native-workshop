@@ -4,9 +4,10 @@ import TabBarIcon from "../components/TabBarIcon";
 import HomeScreen from "../screens/HomeScreen";
 import LinksScreen from "../screens/LinksScreen";
 import Test from "../screens/Test";
+import ListScreen from "../screens/ListScreen";
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = "Test";
+const INITIAL_ROUTE_NAME = "Home";
 
 export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
@@ -18,7 +19,7 @@ export default function BottomTabNavigator({ navigation, route }) {
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
       <BottomTab.Screen
         name="Home"
-        component={HomeScreen}
+        component={ListScreen}
         options={{
           title: "Get Started",
           tabBarIcon: ({ focused }) => (
@@ -36,16 +37,6 @@ export default function BottomTabNavigator({ navigation, route }) {
           )
         }}
       />
-      {/* <BottomTab.Screen
-        name="Test"
-        component={Test}
-        options={{
-          title: "Test",
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name="md-settings" />
-          )
-        }}
-      /> */}
     </BottomTab.Navigator>
   );
 }
@@ -56,7 +47,7 @@ function getHeaderTitle(route) {
 
   switch (routeName) {
     case "Home":
-      return "How to get started";
+      return "ListItem Workshop";
     case "Links":
       return "Links to learn more";
     case "Test":

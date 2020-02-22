@@ -60,7 +60,7 @@ export default function App(props) {
             // screenOptions={{
             //   headerShown: false
             // }}
-            initialRouteName="SignOut"
+            initialRouteName="Root"
           >
             <Stack.Screen
               name="SignOut"
