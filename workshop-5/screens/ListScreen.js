@@ -18,6 +18,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import Colors from "../constants/Colors";
 import ProductCard from "../components/ProductCard";
 import SearchBox from "../components/SearchBox";
+import ProductCardAnimation from "../components/ProductCardAnimation";
 
 export default class ListScreen extends Component {
   constructor(props) {
@@ -37,9 +38,12 @@ export default class ListScreen extends Component {
   }
 
   fetchApi = (page, loadMore = false) => {
+    if (page == this.state.lastPage && this.state.lastPage != 1) {
+      return;
+    }
     axios
       .get(
-        `https://grocery.walmart.com/v4/api/products/search?storeId=1855&page=${page}&query=icescream`
+        `https://grocery.walmart.com/v4/api/products/search?storeId=1855&page=${page}&query=icescream&count=10`
       )
       .then(res => {
         this.setState({
@@ -50,7 +54,7 @@ export default class ListScreen extends Component {
             ? this.state.products.concat(res.data.products)
             : res.data.products,
           page: page + 1,
-          lastPage: Math.ceil(res.data.totalCount / 20)
+          lastPage: Math.ceil(res.data.totalCount / 10)
         });
       });
   };
@@ -64,6 +68,14 @@ export default class ListScreen extends Component {
 
   onRefresh = () => {
     this.fetchApi(1);
+  };
+
+  isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+    const paddingToBottom = 100;
+    return (
+      layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - paddingToBottom
+    );
   };
 
   render() {
@@ -89,8 +101,13 @@ export default class ListScreen extends Component {
               onRefresh={this.onRefresh}
             />
           }
-          onEndReached={() => this.fetchApi(page, page != lastPage)}
-          onEndReachedThreshold={10}
+          // onEndReached={() => this.fetchApi(page, page != lastPage)}
+          // onEndReachedThreshold={10}
+          onScroll={({ nativeEvent }) => {
+            if (this.isCloseToBottom(nativeEvent)) {
+              this.fetchApi(page, page != lastPage);
+            }
+          }}
         />
       </View>
     );
