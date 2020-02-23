@@ -7,6 +7,7 @@ import Test from "../screens/Test";
 import ListScreen from "../screens/ListScreen";
 import TopTabNavigation from "./TopTabNavigation";
 import LifeCycleScreen from "../screens/LifeCycleScreen";
+import { appStyles } from "../constants/Layout";
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = "Home";
@@ -18,14 +19,22 @@ export default function BottomTabNavigator({ navigation, route }) {
   navigation.setOptions({ headerTitle: getHeaderTitle(route) });
 
   return (
-    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
+    <BottomTab.Navigator
+      initialRouteName={INITIAL_ROUTE_NAME}
+      tabBarOptions={{
+        showLabel: false,
+        style: {
+          ...appStyles.boxShadow
+        }
+      }}
+    >
       <BottomTab.Screen
         name="Home"
         component={ListScreen}
         options={{
           title: "Get Started",
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name="md-code-working" />
+            <TabBarIcon focused={focused} name="ios-home" />
           )
         }}
       />
