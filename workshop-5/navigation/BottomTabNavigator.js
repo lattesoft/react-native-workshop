@@ -5,6 +5,7 @@ import HomeScreen from "../screens/HomeScreen";
 import LinksScreen from "../screens/LinksScreen";
 import Test from "../screens/Test";
 import ListScreen from "../screens/ListScreen";
+import TopTabNavigation from "./TopTabNavigation";
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = "Home";
@@ -34,6 +35,16 @@ export default function BottomTabNavigator({ navigation, route }) {
           title: "Resources",
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name="md-book" />
+          )
+        }}
+      />
+      <BottomTab.Screen
+        name="Animations"
+        component={TopTabNavigation}
+        options={{
+          title: "Animations",
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon focused={focused} name="md-settings" />
           )
         }}
       />

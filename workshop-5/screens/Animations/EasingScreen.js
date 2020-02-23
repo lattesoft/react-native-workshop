@@ -29,9 +29,15 @@ export default class EasingScreen extends Component {
       inputRange: [0, 1],
       outputRange: [0, 260]
     });
+    const backgroundColor = this.animatedValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ["red", "blue"]
+    });
     return (
       <View style={styles.container}>
-        <Animated.View style={[styles.block, { marginLeft }]} />
+        <Animated.View
+          style={[styles.block, { marginLeft, backgroundColor }]}
+        />
         <ScrollView>
           <Text style={{ textAlign: "center" }}>
             Scroll up for more animations
