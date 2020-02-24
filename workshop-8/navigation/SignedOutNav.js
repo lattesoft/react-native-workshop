@@ -6,7 +6,7 @@ import RegisterScreen from "../screens/RegisterScreen";
 
 const Stack = createStackNavigator();
 
-const SignedOutNav = ({ onSignIn }) => {
+const SignedOutNav = props => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -16,9 +16,12 @@ const SignedOutNav = ({ onSignIn }) => {
     >
       <Stack.Screen
         name="Login"
-        children={() => <LoginScreen onSignIn={onSignIn} />}
+        children={nav => <LoginScreen {...props} {...nav} />}
       />
-      <Stack.Screen name="Regis" component={RegisterScreen} />
+      <Stack.Screen
+        name="Regis"
+        children={nav => <RegisterScreen {...props} {...nav} />}
+      />
     </Stack.Navigator>
   );
 };

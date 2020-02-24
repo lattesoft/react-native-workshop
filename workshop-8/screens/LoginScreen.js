@@ -91,7 +91,15 @@ export default class LoginScreen extends Component {
               <TextInput placeholder="Password" style={styles.textInput} />
               <TouchableOpacity
                 style={styles.buttonStyle}
-                onPress={() => this.props.onSignIn()}
+                onPress={() =>
+                  this.props.setLogin({
+                    username: "test",
+                    password: "1234",
+                    email: "test@test.com",
+                    first_name: "Test",
+                    last_name: "Test"
+                  })
+                }
               >
                 <Text style={styles.textStyle()}>Login</Text>
               </TouchableOpacity>

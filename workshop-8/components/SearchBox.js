@@ -3,10 +3,12 @@ import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import { appStyles } from "../constants/Layout";
 import Colors from "../constants/Colors";
 import { Icon } from "native-base";
+import UserCircle from "./UserCircle";
 
-const SearchBox = ({ searchText, onChangeText }) => {
+const SearchBox = props => {
   return (
     <View style={{ alignItems: "center" }}>
+      <UserCircle {...props} />
       <View
         style={{
           marginHorizontal: 20,
@@ -40,8 +42,8 @@ const SearchBox = ({ searchText, onChangeText }) => {
         >
           <TextInput
             placeholder="Search"
-            onChangeText={text => onChangeText(text)}
-            value={searchText}
+            onChangeText={text => props.onChangeText(text)}
+            value={props.searchText}
             style={[appStyles.textStyle("#000", 16), { flex: 1 }]}
           />
         </View>

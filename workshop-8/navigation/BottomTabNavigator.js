@@ -8,57 +8,69 @@ import ListScreen from "../screens/ListScreen";
 import TopTabNavigation from "./TopTabNavigation";
 import LifeCycleScreen from "../screens/LifeCycleScreen";
 import { appStyles } from "../constants/Layout";
+import {
+  View,
+  Modal,
+  Text,
+  TouchableWithoutFeedback,
+  TouchableOpacity
+} from "react-native";
+import PrivateHoc from "../components/PrivateHoc";
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = "Home";
 
-export default function BottomTabNavigator({ navigation, route }) {
+export default function BottomTabNavigator(props) {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
-  navigation.setOptions({ headerTitle: getHeaderTitle(route) });
+  props.navigation.setOptions({ headerTitle: getHeaderTitle(props.route) });
 
   return (
-    <BottomTab.Navigator
-      initialRouteName={INITIAL_ROUTE_NAME}
-      tabBarOptions={{
-        showLabel: false,
-        style: {
-          ...appStyles.boxShadow
-        }
-      }}
-    >
-      <BottomTab.Screen
-        name="Home"
-        component={ListScreen}
-        options={{
-          title: "Get Started",
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name="ios-home" />
-          )
+    <View style={appStyles.container}>
+      <BottomTab.Navigator
+        initialRouteName={INITIAL_ROUTE_NAME}
+        tabBarOptions={{
+          showLabel: false,
+          style: {
+            ...appStyles.boxShadow
+          }
         }}
-      />
-      <BottomTab.Screen
-        name="Links"
-        component={LifeCycleScreen}
-        options={{
-          title: "Resources",
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name="md-book" />
-          )
-        }}
-      />
-      <BottomTab.Screen
-        name="Animations"
-        component={TopTabNavigation}
-        options={{
-          title: "Animations",
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name="md-settings" />
-          )
-        }}
-      />
-    </BottomTab.Navigator>
+      >
+        <BottomTab.Screen
+          name="Home"
+          component={PrivateHoc(ListScreen)}
+          // children={() => <NewComponent name="TEST" />}
+          options={{
+            title: "Get Started",
+            tabBarIcon: ({ focused }) => (
+              <TabBarIcon focused={focused} name="ios-home" />
+            )
+          }}
+        />
+        <BottomTab.Screen
+          name="Links"
+          component={LifeCycleScreen}
+          options={{
+            title: "Resources",
+            tabBarIcon: ({ focused }) => (
+              <TabBarIcon focused={focused} name="md-book" />
+            )
+          }}
+        />
+        <BottomTab.Screen
+          name="Animations"
+          component={TopTabNavigation}
+          options={{
+            title: "Animations",
+            tabBarIcon: ({ focused }) => (
+              <TabBarIcon focused={focused} name="md-settings" />
+            )
+          }}
+        />
+      </BottomTab.Navigator>
+      {/* <BottomModal /> */}
+    </View>
   );
 }
 

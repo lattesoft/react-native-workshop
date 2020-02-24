@@ -81,7 +81,7 @@ export default class ListScreen extends Component {
   render() {
     let { searchProducts, searchText, page, lastPage } = this.state;
     return (
-      <SafeAreaView>
+      <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
         <FlatList
           scrollEnabled
           numColumns={2}
@@ -93,6 +93,7 @@ export default class ListScreen extends Component {
           )}
           ListHeaderComponent={
             <SearchBox
+              {...this.props}
               searchText={searchText}
               onChangeText={this.handleSearch}
             />

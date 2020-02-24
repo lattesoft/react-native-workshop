@@ -22,6 +22,8 @@ import { Icon } from "native-base";
 import { appStyles } from "./constants/Layout";
 import Colors from "./constants/Colors";
 import Setup from "./Setup";
+import { Provider } from "react-redux";
+import { store } from "./store";
 
 const Stack = createStackNavigator();
 
@@ -61,15 +63,17 @@ export default function App(props) {
     return null;
   } else {
     return (
-      <View style={styles.container}>
-        {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-        <NavigationContainer
-          ref={containerRef}
-          initialState={initialNavigationState}
-        >
-          <Setup />
-        </NavigationContainer>
-      </View>
+      <Provider store={store}>
+        <View style={styles.container}>
+          {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+          <NavigationContainer
+            ref={containerRef}
+            initialState={initialNavigationState}
+          >
+            <Setup />
+          </NavigationContainer>
+        </View>
+      </Provider>
     );
   }
 }
